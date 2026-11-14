@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:background="#F7F7EF">
 
-    <!-- CONTENIDO PRINCIPAL CON SCROLL -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,7 +17,7 @@
             android:orientation="vertical"
             android:padding="22dp">
 
-            <!-- ENCABEZADO: FECHA, SALUDO Y AVATAR -->
+            <!-- ENCABEZADO -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -37,7 +36,7 @@
                         android:id="@+id/tvFecha"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Sábado, 7 de noviembre"
+                        android:text="Cargando fecha..."
                         android:textColor="#74817A"
                         android:textSize="13sp"/>
 
@@ -45,7 +44,7 @@
                         android:id="@+id/tvSaludo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hola, Alex ☀️"
+                        android:text="Hola, Usuario ☀️"
                         android:textColor="#1D302D"
                         android:textSize="26sp"
                         android:textStyle="bold"
@@ -58,7 +57,7 @@
                     android:layout_height="46dp"
                     android:background="#E5F1EA"
                     android:gravity="center"
-                    android:text="AL"
+                    android:text="US"
                     android:textColor="#087F63"
                     android:textSize="15sp"
                     android:textStyle="bold"/>
@@ -73,37 +72,18 @@
                 android:padding="22dp"
                 android:layout_marginBottom="18dp">
 
-                <LinearLayout
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Tu saldo disponible"
-                        android:textColor="#B8D4CC"
-                        android:textSize="13sp"/>
-
-                    <TextView
-                        android:id="@+id/tvMesActual"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="#166E58"
-                        android:paddingHorizontal="12dp"
-                        android:paddingVertical="4dp"
-                        android:text="Noviembre"
-                        android:textColor="#E5F1EA"
-                        android:textSize="12sp"/>
-                </LinearLayout>
+                    android:text="Tu saldo disponible"
+                    android:textColor="#B8D4CC"
+                    android:textSize="13sp"/>
 
                 <TextView
                     android:id="@+id/tvSaldoTotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1.013,50 €"
+                    android:text="0,00 €"
                     android:textColor="#FFFFFF"
                     android:textSize="34sp"
                     android:textStyle="bold"
@@ -116,7 +96,6 @@
                     android:background="#1D755F"
                     android:layout_marginBottom="16dp"/>
 
-                <!-- INGRESOS Y GASTOS -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -139,7 +118,7 @@
                             android:id="@+id/tvIngresos"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="+1.200,00 €"
+                            android:text="+0,00 €"
                             android:textColor="#FFFFFF"
                             android:textSize="16sp"
                             android:textStyle="bold"
@@ -163,7 +142,7 @@
                             android:id="@+id/tvGastos"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="-186,50 €"
+                            android:text="-0,00 €"
                             android:textColor="#FFFFFF"
                             android:textSize="16sp"
                             android:textStyle="bold"
@@ -185,67 +164,16 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="24dp"/>
 
-            <!-- SECCIÓN: ¿EN QUÉ SE VA? -->
-            <LinearLayout
+            <!-- CATEGORÍAS -->
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="10dp">
+                android:text="¿En qué se va?"
+                android:textColor="#1D302D"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp"/>
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="¿En qué se va?"
-                    android:textColor="#1D302D"
-                    android:textSize="17sp"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Este mes"
-                    android:textColor="#74817A"
-                    android:textSize="12sp"/>
-            </LinearLayout>
-
-            <!-- BARRA SEGMENTADA DE CATEGORÍAS -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:orientation="horizontal"
-                android:layout_marginBottom="14dp">
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="43"
-                    android:background="#087F63"
-                    android:layout_marginEnd="3dp"/>
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="27"
-                    android:background="#A695B8"
-                    android:layout_marginEnd="3dp"/>
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="17"
-                    android:background="#D9B664"
-                    android:layout_marginEnd="3dp"/>
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="13"
-                    android:background="#97C9B8"/>
-            </LinearLayout>
-
-            <!-- LEYENDA DE CATEGORÍAS -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -253,18 +181,20 @@
                 android:layout_marginBottom="6dp">
 
                 <TextView
+                    android:id="@+id/tvCatComida"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="🟢 Comida · 80,50 €"
+                    android:text="🟢 Comida · 0,00 €"
                     android:textColor="#74817A"
                     android:textSize="12sp"/>
 
                 <TextView
+                    android:id="@+id/tvCatEstudios"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="🟣 Estudios · 50,00 €"
+                    android:text="🟣 Estudios · 0,00 €"
                     android:textColor="#74817A"
                     android:textSize="12sp"/>
             </LinearLayout>
@@ -276,194 +206,22 @@
                 android:layout_marginBottom="24dp">
 
                 <TextView
+                    android:id="@+id/tvCatOcio"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="🟡 Ocio · 32,00 €"
+                    android:text="🟡 Ocio · 0,00 €"
                     android:textColor="#74817A"
                     android:textSize="12sp"/>
 
                 <TextView
+                    android:id="@+id/tvCatTransporte"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="🔵 Transporte · 24,00 €"
+                    android:text="🔵 Transporte · 0,00 €"
                     android:textColor="#74817A"
                     android:textSize="12sp"/>
-            </LinearLayout>
-
-            <!-- ÚLTIMOS MOVIMIENTOS -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="14dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Últimos movimientos"
-                    android:textColor="#1D302D"
-                    android:textSize="17sp"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:id="@+id/tvVerTodos"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ver todos →"
-                    android:textColor="#087F63"
-                    android:textSize="13sp"
-                    android:textStyle="bold"/>
-            </LinearLayout>
-
-            <!-- MOVIMIENTO 1 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="16dp">
-
-                <TextView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    android:background="#F5EAE4"
-                    android:gravity="center"
-                    android:text="🧺"
-                    android:textSize="18sp"/>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Compra del súper"
-                        android:textColor="#1D302D"
-                        android:textSize="14sp"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Comida · 7 nov"
-                        android:textColor="#74817A"
-                        android:textSize="12sp"
-                        android:layout_marginTop="2dp"/>
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-62,50 €"
-                    android:textColor="#1D302D"
-                    android:textSize="14sp"
-                    android:textStyle="bold"/>
-            </LinearLayout>
-
-            <!-- MOVIMIENTO 2 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="16dp">
-
-                <TextView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    android:background="#F5EAE4"
-                    android:gravity="center"
-                    android:text="☕"
-                    android:textSize="18sp"/>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Café con amigos"
-                        android:textColor="#1D302D"
-                        android:textSize="14sp"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Comida · 7 nov"
-                        android:textColor="#74817A"
-                        android:textSize="12sp"
-                        android:layout_marginTop="2dp"/>
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-18,00 €"
-                    android:textColor="#1D302D"
-                    android:textSize="14sp"
-                    android:textStyle="bold"/>
-            </LinearLayout>
-
-            <!-- MOVIMIENTO 3 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="16dp">
-
-                <TextView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    android:background="#E5F1EA"
-                    android:gravity="center"
-                    android:text="🚌"
-                    android:textSize="18sp"/>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Abono de transporte"
-                        android:textColor="#1D302D"
-                        android:textSize="14sp"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Transporte · 6 nov"
-                        android:textColor="#74817A"
-                        android:textSize="12sp"
-                        android:layout_marginTop="2dp"/>
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-24,00 €"
-                    android:textColor="#1D302D"
-                    android:textSize="14sp"
-                    android:textStyle="bold"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -479,7 +237,6 @@
         android:orientation="horizontal"
         android:gravity="center">
 
-        <!-- TAB INICIO -->
         <LinearLayout
             android:id="@+id/tabInicio"
             android:layout_width="0dp"
@@ -487,26 +244,10 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center">
-
-            <TextView
-                android:layout_width="52dp"
-                android:layout_height="28dp"
-                android:background="#E5F1EA"
-                android:gravity="center"
-                android:text="🏠"
-                android:textSize="14sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Inicio"
-                android:textColor="#087F63"
-                android:textSize="11sp"
-                android:textStyle="bold"
-                android:layout_marginTop="2dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🏠" android:textSize="14sp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Inicio" android:textColor="#087F63" android:textSize="11sp" android:textStyle="bold"/>
         </LinearLayout>
 
-        <!-- TAB REGISTRAR -->
         <LinearLayout
             android:id="@+id/tabRegistrar"
             android:layout_width="0dp"
@@ -514,25 +255,10 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center">
-
-            <TextView
-                android:layout_width="52dp"
-                android:layout_height="28dp"
-                android:gravity="center"
-                android:text="⊕"
-                android:textColor="#74817A"
-                android:textSize="18sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Registrar"
-                android:textColor="#74817A"
-                android:textSize="11sp"
-                android:layout_marginTop="2dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⊕" android:textColor="#74817A" android:textSize="18sp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Registrar" android:textColor="#74817A" android:textSize="11sp"/>
         </LinearLayout>
 
-        <!-- TAB HISTORIAL -->
         <LinearLayout
             android:id="@+id/tabHistorial"
             android:layout_width="0dp"
@@ -540,24 +266,9 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center">
-
-            <TextView
-                android:layout_width="52dp"
-                android:layout_height="28dp"
-                android:gravity="center"
-                android:text="☰"
-                android:textColor="#74817A"
-                android:textSize="16sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Historial"
-                android:textColor="#74817A"
-                android:textSize="11sp"
-                android:layout_marginTop="2dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="☰" android:textColor="#74817A" android:textSize="16sp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Historial" android:textColor="#74817A" android:textSize="11sp"/>
         </LinearLayout>
-
     </LinearLayout>
 
 </RelativeLayout>

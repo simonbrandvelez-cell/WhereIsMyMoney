@@ -6,7 +6,6 @@
     android:background="#F7F7EF"
     android:fillViewport="true">
 
-    <!-- Contenedor con margen exterior real para separarse de los bordes -->
     <LinearLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
@@ -55,7 +54,6 @@
                     android:text="My Money"
                     android:textColor="#1D302D"
                     android:textSize="17sp"/>
-
             </LinearLayout>
         </LinearLayout>
 
@@ -75,7 +73,6 @@
             android:text="Menos ¿en qué lo gasté? y más tranquilidad. Entra y empieza a llevar tus cuentas."
             android:textColor="#74817A"
             android:textSize="14sp"
-            android:lineSpacingExtra="4dp"
             android:layout_marginBottom="28dp"/>
 
         <!-- NOMBRE PARA REGISTRO -->
@@ -140,23 +137,12 @@
             android:inputType="textPassword"
             android:singleLine="true"/>
 
-        <!-- OLVIDASTE CONTRASEÑA -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="¿Olvidaste tu contraseña?"
-            android:textColor="#087F63"
-            android:textStyle="bold"
-            android:textSize="12sp"
-            android:gravity="end"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="24dp"/>
-
         <!-- INGRESAR -->
         <Button
             android:id="@+id/btnIngresar"
             android:layout_width="match_parent"
             android:layout_height="54dp"
+            android:layout_marginTop="24dp"
             android:text="Iniciar sesión"
             android:textColor="#FFFFFF"
             android:textSize="15sp"
@@ -164,7 +150,7 @@
             android:backgroundTint="#087F63"
             android:textAllCaps="false"/>
 
-        <!-- REGISTRARSE -->
+        <!-- REGISTRARSE / ALTERNAR -->
         <Button
             android:id="@+id/btnRegistrar"
             android:layout_width="match_parent"
@@ -186,16 +172,5 @@
             android:textSize="13sp"
             android:layout_marginTop="16dp"/>
 
-        <!-- SEGURIDAD -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tus cuentas, en tu espacio."
-            android:textColor="#74817A"
-            android:textSize="11sp"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="16dp"/>
-
     </LinearLayout>
-
 </ScrollView>
