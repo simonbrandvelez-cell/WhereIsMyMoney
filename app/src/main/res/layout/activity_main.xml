@@ -1,59 +1,205 @@
+
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:gravity="center">
+    android:background="#F7F7EF"
+    android:fillViewport="true">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Iniciar sesión"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="24dp" />
-
-    <EditText
-        android:id="@+id/etNombre"
+    <LinearLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nombre (solo para registrarse)"
-        android:inputType="textPersonName" />
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal">
 
-    <EditText
-        android:id="@+id/etCorreo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Correo"
-        android:inputType="textEmailAddress" />
+        <!-- LOGO -->
 
-    <EditText
-        android:id="@+id/etClave"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Contraseña (mínimo 6 caracteres)"
-        android:inputType="textPassword" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="35dp"
+            android:layout_marginBottom="45dp">
 
-    <Button
-        android:id="@+id/btnIngresar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Ingresar" />
+            <TextView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="#087F63"
+                android:gravity="center"
+                android:text="💳"
+                android:textSize="23sp"/>
 
-    <Button
-        android:id="@+id/btnRegistrar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Registrarse" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="12dp">
 
-    <TextView
-        android:id="@+id/tvEstado"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:textSize="18sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Where Is"
+                    android:textColor="#1D302D"
+                    android:textSize="17sp"
+                    android:textStyle="bold"/>
 
-</LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="My Money"
+                    android:textColor="#1D302D"
+                    android:textSize="17sp"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- TITULO -->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tu dinero, más claro."
+            android:textColor="#1D302D"
+            android:textSize="29sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Menos ¿en qué lo gasté? y más tranquilidad. Entra y empieza a llevar tus cuentas."
+            android:textColor="#74817A"
+            android:textSize="14sp"
+            android:lineSpacingExtra="4dp"
+            android:layout_marginBottom="30dp"/>
+
+        <!-- NOMBRE PARA REGISTRO -->
+
+        <EditText
+            android:id="@+id/etNombre"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:padding="15dp"
+            android:backgroundTint="#087F63"
+            android:hint="Nombre completo"
+            android:textColor="#1D302D"
+            android:textColorHint="#74817A"
+            android:inputType="textPersonName"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- CORREO -->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Correo electrónico"
+            android:textColor="#1D302D"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/etCorreo"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:padding="15dp"
+            android:backgroundTint="#087F63"
+            android:hint="tu@correo.com"
+            android:textColor="#1D302D"
+            android:textColorHint="#74817A"
+            android:inputType="textEmailAddress"
+            android:singleLine="true"
+            android:layout_marginBottom="18dp"/>
+
+        <!-- CONTRASEÑA -->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Contraseña"
+            android:textColor="#1D302D"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/etClave"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:padding="15dp"
+            android:backgroundTint="#087F63"
+            android:hint="Escribe tu contraseña"
+            android:textColor="#1D302D"
+            android:textColorHint="#74817A"
+            android:inputType="textPassword"
+            android:singleLine="true"/>
+
+        <!-- OLVIDASTE CONTRASEÑA -->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="¿Olvidaste tu contraseña?"
+            android:textColor="#087F63"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:gravity="end"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="25dp"/>
+
+        <!-- INGRESAR -->
+
+        <Button
+            android:id="@+id/btnIngresar"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:text="➜   Iniciar sesión"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:backgroundTint="#087F63"
+            android:textAllCaps="false"/>
+
+        <!-- REGISTRARSE -->
+
+        <Button
+            android:id="@+id/btnRegistrar"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginTop="12dp"
+            android:text="Crear una cuenta"
+            android:textColor="#087F63"
+            android:textSize="14sp"
+            android:backgroundTint="#E5F1EA"
+            android:textAllCaps="false"/>
+
+        <!-- ESTADO -->
+
+        <TextView
+            android:id="@+id/tvEstado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="#74817A"
+            android:textSize="13sp"
+            android:layout_marginTop="20dp"/>
+
+        <!-- SEGURIDAD -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🔒  Tus cuentas, en tu espacio."
+            android:textColor="#74817A"
+            android:textSize="11sp"
+            android:layout_marginTop="35dp"
+            android:layout_marginBottom="20dp"/>
+
+    </LinearLayout>
+
+</ScrollView>
