@@ -1,7 +1,7 @@
 package com.example.whereismymoney
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -13,13 +13,10 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
 
-class MainActivity : AppCompatActivity() {
+class DMainActivity : AppCompatActivity() {
 
     private val auth = FirebaseAuth.getInstance()
     private val db = Firebase.database.reference
-
-    // Bandera clara para saber si estamos en modo registro (true) o inicio de sesión (false)
-    private var esModoRegistro = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,103 +29,82 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        // Enlazar vistas del XML
-        val etNombre = findViewById<EditText>(R.id.etNombre)
         val etCorreo = findViewById<EditText>(R.id.etCorreo)
         val etClave = findViewById<EditText>(R.id.etClave)
         val btnIngresar = findViewById<Button>(R.id.btnIngresar)
         val btnRegistrar = findViewById<Button>(R.id.btnRegistrar)
         val tvEstado = findViewById<TextView>(R.id.tvEstado)
 
-        // -------------------------------------------------------------
-        // BOTÓN SECUNDARIO: Alternar entre Iniciar Sesión y Registro
-        // -------------------------------------------------------------
+        // -----------------------------------------
+        // REGISTRARSE
+        // -----------------------------------------
         btnRegistrar.setOnClickListener {
-            esModoRegistro = !esModoRegistro // Invierte el estado actual
+            val correo = etCorreo.text.toString().trim()
+            val clave = etClave.text.toString().trim()
 
-            if (esModoRegistro) {
-                // ESTAMOS EN MODO REGISTRO
-                etNombre.visibility = View.VISIBLE
-                btnIngresar.text = "Registrarse"
-                btnRegistrar.text = "¿Ya tienes cuenta? Inicia sesión"
-                tvEstado.text = "Completa tus datos para crear una cuenta."
-            } else {
-                // ESTAMOS EN MODO INICIO DE SESIÓN
-                etNombre.visibility = View.GONE
-                btnIngresar.text = "Iniciar sesión"
-                btnRegistrar.text = "Crear una cuenta"
-                tvEstado.text = ""
+            if (correo.isEmpty() || clave.isEmpty()) {
+                tvEstado.text = "Escribe correo y contraseña"
+                return@setOnClickListener
             }
+
+            if (clave.length < 6) {
+                tvEstado.text = "La contraseña debe tener al menos 6 caracteres"
+                return@setOnClickListener
+            }
+
+            tvEstado.text = "Registrando..."
+
+            auth.createUserWithEmailAndPassword(correo, clave)
+                .addOnSuccessListener { resultado ->
+                    val uid = resultado.user!!.uid
+                    // Extraemos un nombre por defecto del correo (ej: "hipo123" de "hipo123@gmail.com")
+                    val nombrePorDefecto = correo.substringBefore("@")
+
+                    val usuario = mapOf(
+                        "nombre" to nombrePorDefecto,
+                        "correo" to correo
+                    )
+
+                    db.child("usuarios").child(uid).setValue(usuario)
+                        .addOnSuccessListener {
+                            // ¡Éxito! Saltamos a la pantalla de Inicio
+                            val intent = Intent(this, InicioActivity::class.java)
+                            startActivity(intent)
+                            finish() // Cierra el login para que al volver atrás no regrese aquí
+                        }
+                        .addOnFailureListener { e ->
+                            tvEstado.text = "Error DB: ${e.localizedMessage}"
+                        }
+                }
+                .addOnFailureListener { e ->
+                    tvEstado.text = "Error Auth: ${e.localizedMessage}"
+                }
         }
 
-        // -------------------------------------------------------------
-        // BOTÓN PRINCIPAL (DINÁMICO SEGÚN EL MODO)
-        // -------------------------------------------------------------
+        // -----------------------------------------
+        // INGRESAR
+        // -----------------------------------------
         btnIngresar.setOnClickListener {
             val correo = etCorreo.text.toString().trim()
             val clave = etClave.text.toString().trim()
 
             if (correo.isEmpty() || clave.isEmpty()) {
-                tvEstado.text = "Escribe tu correo y contraseña."
+                tvEstado.text = "Escribe correo y contraseña"
                 return@setOnClickListener
             }
 
-            if (esModoRegistro) {
-                // --- LÓGICA DE REGISTRO ---
-                val nombre = etNombre.text.toString().trim()
+            tvEstado.text = "Iniciando sesión..."
 
-                if (nombre.isEmpty()) {
-                    tvEstado.text = "Escribe tu nombre completo."
-                    return@setOnClickListener
+            auth.signInWithEmailAndPassword(correo, clave)
+                .addOnSuccessListener {
+                    // ¡Éxito! Saltamos a la pantalla de Inicio
+                    val intent = Intent(this, InicioActivity::class.java)
+                    startActivity(intent)
+                    finish()
                 }
-                if (clave.length < 6) {
-                    tvEstado.text = "La contraseña debe tener al menos 6 caracteres."
-                    return@setOnClickListener
+                .addOnFailureListener { e ->
+                    tvEstado.text = "Correo o contraseña incorrectos"
                 }
-
-                tvEstado.text = "Creando cuenta..."
-
-                auth.createUserWithEmailAndPassword(correo, clave)
-                    .addOnSuccessListener { resultado ->
-                        val uid = resultado.user?.uid ?: ""
-                        val usuarioMap = mapOf(
-                            "nombre" to nombre,
-                            "correo" to correo
-                        )
-
-                        db.child("usuarios").child(uid).setValue(usuarioMap)
-                            .addOnSuccessListener {
-                                tvEstado.text = "¡Registro exitoso! Bienvenido, $nombre"
-                            }
-                            .addOnFailureListener { e ->
-                                tvEstado.text = "Error al guardar en DB: ${e.message}"
-                            }
-                    }
-                    .addOnFailureListener { e ->
-                        tvEstado.text = "Error en Auth: ${e.message}"
-                    }
-
-            } else {
-                // --- LÓGICA DE INICIO DE SESIÓN ---
-                tvEstado.text = "Iniciando sesión..."
-
-                auth.signInWithEmailAndPassword(correo, clave)
-                    .addOnSuccessListener { resultado ->
-                        val uid = resultado.user?.uid ?: ""
-
-                        db.child("usuarios").child(uid).child("nombre").get()
-                            .addOnSuccessListener { dato ->
-                                val nombre = dato.getValue(String::class.java) ?: "Usuario"
-                                tvEstado.text = "¡Bienvenido de nuevo, $nombre!"
-                            }
-                            .addOnFailureListener {
-                                tvEstado.text = "¡Bienvenido! (Sin perfil en DB)"
-                            }
-                    }
-                    .addOnFailureListener { e ->
-                        tvEstado.text = "Correo o contraseña incorrectos."
-                    }
-            }
         }
     }
 }
