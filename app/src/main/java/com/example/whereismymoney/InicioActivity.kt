@@ -1,5 +1,6 @@
 package com.example.whereismymoney
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.LinearLayout
@@ -46,7 +47,7 @@ class InicioActivity : AppCompatActivity() {
         val tabRegistrar = findViewById<LinearLayout>(R.id.tabRegistrar)
         val tabHistorial = findViewById<LinearLayout>(R.id.tabHistorial)
 
-        // 1. Mostrar la fecha actual formateada en español dinámicamente
+        // 1. Mostrar la fecha actual formateada en español
         val fechaActual = SimpleDateFormat("EEEE, d 'de' MMMM", Locale("es", "ES")).format(Date())
         tvFecha.text = fechaActual.replaceFirstChar { it.uppercase() }
 
@@ -60,7 +61,7 @@ class InicioActivity : AppCompatActivity() {
                     tvIniciales.text = nombre.take(2).uppercase()
                 }
 
-            // 3. Escuchar en tiempo real los movimientos para calcular ingresos, gastos y saldo total dinámicamente
+            // 3. Escuchar los movimientos en tiempo real para calcular ingresos, gastos y saldo total
             db.child("usuarios").child(uid).child("movimientos")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -92,17 +93,24 @@ class InicioActivity : AppCompatActivity() {
                 })
         }
 
-        // Acciones de los botones y pestañas inferiores
+        // ----------------------------------------------------
+        // NAVEGACIÓN Y APERTURA DE PANTALLAS
+        // ----------------------------------------------------
+
+        // Botón principal de "+ Registrar movimiento"
         btnRegistrarMovimiento.setOnClickListener {
-            Toast.makeText(this, "Próximamente: Registrar nuevo movimiento", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, RegistrarActivity::class.java)
+            startActivity(intent)
         }
 
+        // Pestaña inferior "Registrar"
         tabRegistrar.setOnClickListener {
-            Toast.makeText(this, "Ir a Registrar", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, RegistrarActivity::class.java)
+            startActivity(intent)
         }
 
         tabHistorial.setOnClickListener {
-            Toast.makeText(this, "Ir a Historial", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Pantalla de Historial en desarrollo", Toast.LENGTH_SHORT).show()
         }
 
         tvVerTodos.setOnClickListener {

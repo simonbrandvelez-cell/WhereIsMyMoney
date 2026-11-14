@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F7F7EF">
+
+    <!-- CONTENIDO CON SCROLL Y MÁRGENES INTERNOS -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomNav"
+        android:fillViewport="true"
+        android:paddingHorizontal="24dp"
+        android:paddingTop="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="24dp">
+
+            <!-- TÍTULO Y SUBTÍTULO -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Registrar movimiento"
+                android:textColor="#1D302D"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Un pequeño apunte. Todo más claro."
+                android:textColor="#74817A"
+                android:textSize="13.5sp"
+                android:layout_marginBottom="20dp"/>
+
+            <!-- SELECTOR TIPO (GASTO / INGRESO) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:background="#EFEFE6"
+                android:orientation="horizontal"
+                android:padding="4dp"
+                android:layout_marginBottom="20dp">
+
+                <!-- Botón Gasto (Activo por defecto) -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnTabGasto"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="#FFFFFF"
+                    android:text="↗ Gasto"
+                    android:textAllCaps="false"
+                    android:textColor="#087F63"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="12dp"
+                    app:elevation="0dp"/>
+
+                <!-- Botón Ingreso (Inactivo) -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnTabIngreso"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="@android:color/transparent"
+                    android:text="↙ Ingreso"
+                    android:textAllCaps="false"
+                    android:textColor="#74817A"
+                    android:textSize="14sp"
+                    app:cornerRadius="12dp"
+                    app:elevation="0dp"/>
+            </LinearLayout>
+
+            <!-- TARJETA DE MONTO -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardBackgroundColor="#E5F1EA"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:id="@+id/tvPreguntaMonto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="¿Cuánto gastaste?"
+                        android:textColor="#087F63"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <EditText
+                            android:id="@+id/etMonto"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@android:color/transparent"
+                            android:hint="0,00"
+                            android:inputType="numberDecimal"
+                            android:textColor="#1D302D"
+                            android:textColorHint="#A0A9A5"
+                            android:textSize="36sp"
+                            android:textStyle="bold"
+                            android:singleLine="true"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="€"
+                            android:textColor="#087F63"
+                            android:textSize="28sp"
+                            android:textStyle="bold"
+                            android:layout_marginStart="8dp"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- CATEGORÍA -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Categoría"
+                android:textColor="#1D302D"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="6dp"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp">
+
+                    <Spinner
+                        android:id="@+id/spinnerCategoria"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:entries="@array/categorias_array"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="▼"
+                        android:textSize="12sp"
+                        android:textColor="#74817A"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- FECHA -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Fecha"
+                android:textColor="#1D302D"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="6dp"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp">
+
+                    <TextView
+                        android:id="@+id/tvFechaSeleccionada"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="7 de noviembre de 2026"
+                        android:textColor="#1D302D"
+                        android:textSize="14sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📅"
+                        android:textSize="18sp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- NOTA -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nota"
+                android:textColor="#1D302D"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="6dp"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:layout_marginBottom="24dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1dp">
+
+                <EditText
+                    android:id="@+id/etNota"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:gravity="top|start"
+                    android:hint="Ej: Almuerzo en la uni (Opcional)"
+                    android:padding="16dp"
+                    android:textColor="#1D302D"
+                    android:textColorHint="#A0A9A5"
+                    android:textSize="14sp"/>
+            </androidx.cardview.widget.CardView>
+
+            <!-- BOTÓN GUARDAR -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGuardar"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:backgroundTint="#087F63"
+                android:text="✓   Guardar gasto"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:cornerRadius="16dp"
+                app:elevation="0dp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Se añadirá a tus movimientos de noviembre."
+                android:textColor="#74817A"
+                android:textSize="12sp"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- BARRA DE NAVEGACIÓN INFERIOR -->
+    <LinearLayout
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:layout_alignParentBottom="true"
+        android:background="#FFFFFF"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <!-- TAB INICIO -->
+        <LinearLayout
+            android:id="@+id/tabInicio"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="52dp"
+                android:layout_height="28dp"
+                android:gravity="center"
+                android:text="🏠"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Inicio"
+                android:textColor="#74817A"
+                android:textSize="11sp"
+                android:layout_marginTop="2dp"/>
+        </LinearLayout>
+
+        <!-- TAB REGISTRAR (Activo) -->
+        <LinearLayout
+            android:id="@+id/tabRegistrar"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="52dp"
+                android:layout_height="28dp"
+                android:background="#E5F1EA"
+                android:gravity="center"
+                android:text="⊕"
+                android:textColor="#087F63"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Registrar"
+                android:textColor="#087F63"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:layout_marginTop="2dp"/>
+        </LinearLayout>
+
+        <!-- TAB HISTORIAL -->
+        <LinearLayout
+            android:id="@+id/tabHistorial"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="52dp"
+                android:layout_height="28dp"
+                android:gravity="center"
+                android:text="☰"
+                android:textColor="#74817A"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Historial"
+                android:textColor="#74817A"
+                android:textSize="11sp"
+                android:layout_marginTop="2dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
