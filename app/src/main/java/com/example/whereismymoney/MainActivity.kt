@@ -1,6 +1,7 @@
 package com.example.whereismymoney
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -14,9 +15,11 @@ import com.google.firebase.database.database
 
 class MainActivity : AppCompatActivity() {
 
-    // Conexión con Firebase
     private val auth = FirebaseAuth.getInstance()
     private val db = Firebase.database.reference
+
+    // Bandera clara para saber si estamos en modo registro (true) o inicio de sesión (false)
+    private var esModoRegistro = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +32,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        // Enlazar las vistas del diseño
+        // Enlazar vistas del XML
         val etNombre = findViewById<EditText>(R.id.etNombre)
         val etCorreo = findViewById<EditText>(R.id.etCorreo)
         val etClave = findViewById<EditText>(R.id.etClave)
@@ -37,70 +40,95 @@ class MainActivity : AppCompatActivity() {
         val btnRegistrar = findViewById<Button>(R.id.btnRegistrar)
         val tvEstado = findViewById<TextView>(R.id.tvEstado)
 
-        // -----------------------------------------
-        // REGISTRARSE
-        // -----------------------------------------
+        // -------------------------------------------------------------
+        // BOTÓN SECUNDARIO: Alternar entre Iniciar Sesión y Registro
+        // -------------------------------------------------------------
         btnRegistrar.setOnClickListener {
-            val nombre = etNombre.text.toString().trim()
-            val correo = etCorreo.text.toString().trim()
-            val clave = etClave.text.toString().trim()
+            esModoRegistro = !esModoRegistro // Invierte el estado actual
 
-            if (nombre.isEmpty() || correo.isEmpty() || clave.length < 6) {
-                tvEstado.text = "Llena todos los campos (clave mínimo 6)"
-                return@setOnClickListener
+            if (esModoRegistro) {
+                // ESTAMOS EN MODO REGISTRO
+                etNombre.visibility = View.VISIBLE
+                btnIngresar.text = "Registrarse"
+                btnRegistrar.text = "¿Ya tienes cuenta? Inicia sesión"
+                tvEstado.text = "Completa tus datos para crear una cuenta."
+            } else {
+                // ESTAMOS EN MODO INICIO DE SESIÓN
+                etNombre.visibility = View.GONE
+                btnIngresar.text = "Iniciar sesión"
+                btnRegistrar.text = "Crear una cuenta"
+                tvEstado.text = ""
             }
-
-            // 1. Crear el usuario en Authentication
-            auth.createUserWithEmailAndPassword(correo, clave)
-                .addOnSuccessListener { resultado ->
-                    val uid = resultado.user!!.uid
-
-                    // 2. Guardar su perfil en Realtime Database
-                    val usuario = mapOf(
-                        "nombre" to nombre,
-                        "correo" to correo
-                    )
-
-                    db.child("usuarios").child(uid).setValue(usuario)
-                        .addOnSuccessListener {
-                            tvEstado.text = "¡Usuario registrado: $nombre!"
-                        }
-                        .addOnFailureListener { e ->
-                            tvEstado.text = "Error al guardar: ${e.message}"
-                        }
-                }
-                .addOnFailureListener { e ->
-                    tvEstado.text = "Error al registrar: ${e.message}"
-                }
         }
 
-        // -----------------------------------------
-        // INGRESAR
-        // -----------------------------------------
+        // -------------------------------------------------------------
+        // BOTÓN PRINCIPAL (DINÁMICO SEGÚN EL MODO)
+        // -------------------------------------------------------------
         btnIngresar.setOnClickListener {
             val correo = etCorreo.text.toString().trim()
             val clave = etClave.text.toString().trim()
 
             if (correo.isEmpty() || clave.isEmpty()) {
-                tvEstado.text = "Escribe correo y contraseña"
+                tvEstado.text = "Escribe tu correo y contraseña."
                 return@setOnClickListener
             }
 
-            // 1. Verificar correo y contraseña
-            auth.signInWithEmailAndPassword(correo, clave)
-                .addOnSuccessListener { resultado ->
-                    val uid = resultado.user!!.uid
+            if (esModoRegistro) {
+                // --- LÓGICA DE REGISTRO ---
+                val nombre = etNombre.text.toString().trim()
 
-                    // 2. Leer su nombre desde Realtime Database
-                    db.child("usuarios").child(uid).child("nombre").get()
-                        .addOnSuccessListener { dato ->
-                            val nombre = dato.getValue(String::class.java)
-                            tvEstado.text = "¡Bienvenido, $nombre!"
-                        }
+                if (nombre.isEmpty()) {
+                    tvEstado.text = "Escribe tu nombre completo."
+                    return@setOnClickListener
                 }
-                .addOnFailureListener {
-                    tvEstado.text = "Correo o contraseña incorrectos"
+                if (clave.length < 6) {
+                    tvEstado.text = "La contraseña debe tener al menos 6 caracteres."
+                    return@setOnClickListener
                 }
+
+                tvEstado.text = "Creando cuenta..."
+
+                auth.createUserWithEmailAndPassword(correo, clave)
+                    .addOnSuccessListener { resultado ->
+                        val uid = resultado.user?.uid ?: ""
+                        val usuarioMap = mapOf(
+                            "nombre" to nombre,
+                            "correo" to correo
+                        )
+
+                        db.child("usuarios").child(uid).setValue(usuarioMap)
+                            .addOnSuccessListener {
+                                tvEstado.text = "¡Registro exitoso! Bienvenido, $nombre"
+                            }
+                            .addOnFailureListener { e ->
+                                tvEstado.text = "Error al guardar en DB: ${e.message}"
+                            }
+                    }
+                    .addOnFailureListener { e ->
+                        tvEstado.text = "Error en Auth: ${e.message}"
+                    }
+
+            } else {
+                // --- LÓGICA DE INICIO DE SESIÓN ---
+                tvEstado.text = "Iniciando sesión..."
+
+                auth.signInWithEmailAndPassword(correo, clave)
+                    .addOnSuccessListener { resultado ->
+                        val uid = resultado.user?.uid ?: ""
+
+                        db.child("usuarios").child(uid).child("nombre").get()
+                            .addOnSuccessListener { dato ->
+                                val nombre = dato.getValue(String::class.java) ?: "Usuario"
+                                tvEstado.text = "¡Bienvenido de nuevo, $nombre!"
+                            }
+                            .addOnFailureListener {
+                                tvEstado.text = "¡Bienvenido! (Sin perfil en DB)"
+                            }
+                    }
+                    .addOnFailureListener { e ->
+                        tvEstado.text = "Correo o contraseña incorrectos."
+                    }
+            }
         }
     }
 }
