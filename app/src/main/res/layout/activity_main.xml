@@ -6,12 +6,16 @@
     android:background="#F7F7EF"
     android:fillViewport="true">
 
+    <!-- Contenedor con margen exterior real para separarse de los bordes -->
     <LinearLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
         android:gravity="center_horizontal">
 
         <!-- LOGO -->
@@ -20,8 +24,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginTop="35dp"
-            android:layout_marginBottom="45dp">
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="35dp">
 
             <TextView
                 android:layout_width="48dp"
@@ -61,7 +65,7 @@
             android:layout_height="wrap_content"
             android:text="Tu dinero, más claro."
             android:textColor="#1D302D"
-            android:textSize="29sp"
+            android:textSize="28sp"
             android:textStyle="bold"
             android:layout_marginBottom="8dp"/>
 
@@ -72,14 +76,15 @@
             android:textColor="#74817A"
             android:textSize="14sp"
             android:lineSpacingExtra="4dp"
-            android:layout_marginBottom="30dp"/>
+            android:layout_marginBottom="28dp"/>
 
         <!-- NOMBRE PARA REGISTRO -->
         <EditText
             android:id="@+id/etNombre"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:padding="15dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:backgroundTint="#087F63"
             android:hint="Nombre completo"
             android:textColor="#1D302D"
@@ -96,13 +101,14 @@
             android:textColor="#1D302D"
             android:textStyle="bold"
             android:textSize="13sp"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="6dp"/>
 
         <EditText
             android:id="@+id/etCorreo"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:padding="15dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:backgroundTint="#087F63"
             android:hint="tu@correo.com"
             android:textColor="#1D302D"
@@ -119,13 +125,14 @@
             android:textColor="#1D302D"
             android:textStyle="bold"
             android:textSize="13sp"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="6dp"/>
 
         <EditText
             android:id="@+id/etClave"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:padding="15dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:backgroundTint="#087F63"
             android:hint="Escribe tu contraseña"
             android:textColor="#1D302D"
@@ -142,15 +149,15 @@
             android:textStyle="bold"
             android:textSize="12sp"
             android:gravity="end"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="25dp"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="24dp"/>
 
         <!-- INGRESAR -->
         <Button
             android:id="@+id/btnIngresar"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:text="➜   Iniciar sesión"
+            android:text="Iniciar sesión"
             android:textColor="#FFFFFF"
             android:textSize="15sp"
             android:textStyle="bold"
@@ -177,17 +184,17 @@
             android:gravity="center"
             android:textColor="#74817A"
             android:textSize="13sp"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="16dp"/>
 
         <!-- SEGURIDAD -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🔒  Tus cuentas, en tu espacio."
+            android:text="Tus cuentas, en tu espacio."
             android:textColor="#74817A"
             android:textSize="11sp"
-            android:layout_marginTop="35dp"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="16dp"/>
 
     </LinearLayout>
 
