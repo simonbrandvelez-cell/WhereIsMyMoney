@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "326207038888",
+    "project_id": "where-is-my-money-819f1",
+    "storage_bucket": "where-is-my-money-819f1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:326207038888:android:1821f1fcb82140c49aa99d",
+        "android_client_info": {
+          "package_name": "com.example.whereismymoney"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoLouXPzPgdKAy2IQuVLdVPjW5O0czdN0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
