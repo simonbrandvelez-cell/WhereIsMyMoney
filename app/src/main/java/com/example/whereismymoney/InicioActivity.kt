@@ -1,5 +1,6 @@
 package com.example.whereismymoney
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
@@ -36,6 +38,18 @@ class InicioActivity : AppCompatActivity() {
     private val auth = FirebaseAuth.getInstance()
     private val db = Firebase.database.reference
 
+    private var totalIngresosBase = 0.0
+    private var totalGastosBase = 0.0
+    private var listaMovimientosBase = listOf<MovimientoItem>()
+    private var monedaActual = "EUR"
+
+    private lateinit var tvSaldoTotal: TextView
+    private lateinit var tvIngresos: TextView
+    private lateinit var tvGastos: TextView
+    private lateinit var tvDivisaActual: TextView
+    private lateinit var tvContadorMovs: TextView
+    private lateinit var llUltimosMovimientos: LinearLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -47,18 +61,26 @@ class InicioActivity : AppCompatActivity() {
             insets
         }
 
+        val prefs = getSharedPreferences("wimm_prefs", Context.MODE_PRIVATE)
+        monedaActual = prefs.getString("moneda", "EUR") ?: "EUR"
+
         val tvFecha = findViewById<TextView>(R.id.tvFecha)
         val tvSaludo = findViewById<TextView>(R.id.tvSaludo)
         val tvIniciales = findViewById<TextView>(R.id.tvIniciales)
-        val tvSaldoTotal = findViewById<TextView>(R.id.tvSaldoTotal)
-        val tvIngresos = findViewById<TextView>(R.id.tvIngresos)
-        val tvGastos = findViewById<TextView>(R.id.tvGastos)
+        val btnCerrarSesion = findViewById<CardView>(R.id.btnCerrarSesion)
+        tvSaldoTotal = findViewById(R.id.tvSaldoTotal)
+        tvIngresos = findViewById(R.id.tvIngresos)
+        tvGastos = findViewById(R.id.tvGastos)
         val btnRegistrarMovimiento = findViewById<Button>(R.id.btnRegistrarMovimiento)
-        val tvContadorMovs = findViewById<TextView>(R.id.tvContadorMovs)
-        val llUltimosMovimientos = findViewById<LinearLayout>(R.id.llUltimosMovimientos)
+        val btnCambiarDivisa = findViewById<CardView>(R.id.btnCambiarDivisa)
+        tvDivisaActual = findViewById(R.id.tvDivisaActual)
+        tvContadorMovs = findViewById(R.id.tvContadorMovs)
+        llUltimosMovimientos = findViewById(R.id.llUltimosMovimientos)
 
         val tabRegistrar = findViewById<LinearLayout>(R.id.tabRegistrar)
         val tabHistorial = findViewById<LinearLayout>(R.id.tabHistorial)
+
+        actualizarEtiquetaMoneda()
 
         val fechaActual = SimpleDateFormat("EEEE, d 'de' MMMM", Locale("es", "ES")).format(Date())
         tvFecha.text = fechaActual.replaceFirstChar { it.uppercase() }
@@ -75,9 +97,9 @@ class InicioActivity : AppCompatActivity() {
             db.child("usuarios").child(uid).child("movimientos")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        var totalIngresos = 0.0
-                        var totalGastos = 0.0
-                        val listaMovimientos = mutableListOf<MovimientoItem>()
+                        var ingresos = 0.0
+                        var gastos = 0.0
+                        val listaTemporal = mutableListOf<MovimientoItem>()
 
                         for (movSnapshot in snapshot.children) {
                             val tipo = movSnapshot.child("tipo").getValue(String::class.java) ?: "gasto"
@@ -87,12 +109,12 @@ class InicioActivity : AppCompatActivity() {
                             val fecha = movSnapshot.child("fecha").getValue(String::class.java) ?: ""
 
                             if (tipo.equals("ingreso", ignoreCase = true)) {
-                                totalIngresos += monto
+                                ingresos += monto
                             } else {
-                                totalGastos += monto
+                                gastos += monto
                             }
 
-                            listaMovimientos.add(
+                            listaTemporal.add(
                                 MovimientoItem(
                                     tipo = tipo,
                                     monto = monto,
@@ -103,54 +125,48 @@ class InicioActivity : AppCompatActivity() {
                             )
                         }
 
-                        val saldoDisponible = totalIngresos - totalGastos
-
-                        tvIngresos.text = String.format(Locale("es", "ES"), "+%.2f €", totalIngresos)
-                        tvGastos.text = String.format(Locale("es", "ES"), "-%.2f €", totalGastos)
-                        tvSaldoTotal.text = String.format(Locale("es", "ES"), "%.2f €", saldoDisponible)
-                        tvContadorMovs.text = "${listaMovimientos.size} registros"
-
-                        llUltimosMovimientos.removeAllViews()
-
-                        if (listaMovimientos.isEmpty()) {
-                            llUltimosMovimientos.addView(
-                                crearTarjetaMovimiento(
-                                    icono = "💸",
-                                    titulo = "Sin movimientos aún",
-                                    detalle = "Registra tu primer gasto o ingreso",
-                                    montoTexto = "0,00 €",
-                                    esIngreso = true
-                                )
-                            )
-                        } else {
-                            val recientes = listaMovimientos.asReversed().take(5)
-                            for (item in recientes) {
-                                val esIngreso = item.tipo.equals("ingreso", ignoreCase = true)
-                                val titulo = if (item.nota.isNotEmpty()) item.nota else item.categoria
-                                val detalle = if (item.fecha.isNotEmpty()) "${item.categoria} · ${item.fecha}" else item.categoria
-                                val montoFormateado = String.format(
-                                    Locale("es", "ES"),
-                                    if (esIngreso) "+%.2f €" else "-%.2f €",
-                                    item.monto
-                                )
-
-                                llUltimosMovimientos.addView(
-                                    crearTarjetaMovimiento(
-                                        icono = if (esIngreso) "💰" else "💸",
-                                        titulo = titulo,
-                                        detalle = detalle,
-                                        montoTexto = montoFormateado,
-                                        esIngreso = esIngreso
-                                    )
-                                )
-                            }
-                        }
+                        totalIngresosBase = ingresos
+                        totalGastosBase = gastos
+                        listaMovimientosBase = listaTemporal
+                        refrescarPantallaConDivisa()
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-                        Toast.makeText(this@InicioActivity, "Error al sincronizar datos: ${error.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@InicioActivity,
+                            "Error al sincronizar datos: ${error.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 })
+        }
+
+        btnCambiarDivisa.setOnClickListener {
+            val opciones = arrayOf("Euro (EUR €)", "Peso Colombiano (COP $)", "Dólar Estadounidense (USD US$)")
+            val codigos = arrayOf("EUR", "COP", "USD")
+            val indiceActual = codigos.indexOf(monedaActual).coerceAtLeast(0)
+
+            AlertDialog.Builder(this)
+                .setTitle("Selecciona una divisa")
+                .setSingleChoiceItems(opciones, indiceActual) { dialog, which ->
+                    monedaActual = codigos[which]
+                    prefs.edit().putString("moneda", monedaActual).apply()
+                    actualizarEtiquetaMoneda()
+                    refrescarPantallaConDivisa()
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Cancelar", null)
+                .show()
+        }
+
+        btnCerrarSesion.setOnClickListener {
+            auth.signOut()
+            Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            startActivity(intent)
+            finish()
         }
 
         btnRegistrarMovimiento.setOnClickListener {
@@ -163,6 +179,82 @@ class InicioActivity : AppCompatActivity() {
 
         tabHistorial.setOnClickListener {
             startActivity(Intent(this, HistorialActivity::class.java))
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val prefs = getSharedPreferences("wimm_prefs", Context.MODE_PRIVATE)
+        val guardada = prefs.getString("moneda", "EUR") ?: "EUR"
+        if (guardada != monedaActual) {
+            monedaActual = guardada
+            actualizarEtiquetaMoneda()
+            refrescarPantallaConDivisa()
+        }
+    }
+
+    private fun actualizarEtiquetaMoneda() {
+        tvDivisaActual.text = when (monedaActual) {
+            "COP" -> "COP ($) ▾"
+            "USD" -> "USD (US$) ▾"
+            else -> "EUR (€) ▾"
+        }
+    }
+
+    private fun convertirDesdeEur(montoEur: Double): Double {
+        return when (monedaActual) {
+            "COP" -> montoEur * 4650.0
+            "USD" -> montoEur * 1.08
+            else -> montoEur
+        }
+    }
+
+    private fun formatearMonto(montoEur: Double, prefijoSigno: String = ""): String {
+        val convertido = convertirDesdeEur(montoEur)
+        return when (monedaActual) {
+            "COP" -> "$prefijoSigno${String.format(Locale("es", "CO"), "%,.0f", convertido)} COP"
+            "USD" -> "$prefijoSigno${String.format(Locale("en", "US"), "%,.2f", convertido)} US$"
+            else -> "$prefijoSigno${String.format(Locale("es", "ES"), "%,.2f", convertido)} €"
+        }
+    }
+
+    private fun refrescarPantallaConDivisa() {
+        val saldoDisponible = totalIngresosBase - totalGastosBase
+        tvIngresos.text = formatearMonto(totalIngresosBase, "+")
+        tvGastos.text = formatearMonto(totalGastosBase, "-")
+        tvSaldoTotal.text = formatearMonto(saldoDisponible)
+        tvContadorMovs.text = "${listaMovimientosBase.size} registros"
+
+        llUltimosMovimientos.removeAllViews()
+
+        if (listaMovimientosBase.isEmpty()) {
+            llUltimosMovimientos.addView(
+                crearTarjetaMovimiento(
+                    icono = "💸",
+                    titulo = "Sin movimientos aún",
+                    detalle = "Registra tu primer gasto o ingreso",
+                    montoTexto = formatearMonto(0.0),
+                    esIngreso = true
+                )
+            )
+        } else {
+            val recientes = listaMovimientosBase.asReversed().take(5)
+            for (item in recientes) {
+                val esIngreso = item.tipo.equals("ingreso", ignoreCase = true)
+                val titulo = if (item.nota.isNotEmpty()) item.nota else item.categoria
+                val detalle = if (item.fecha.isNotEmpty()) "${item.categoria} · ${item.fecha}" else item.categoria
+                val montoFormateado = formatearMonto(item.monto, if (esIngreso) "+" else "-")
+
+                llUltimosMovimientos.addView(
+                    crearTarjetaMovimiento(
+                        icono = if (esIngreso) "💰" else "💸",
+                        titulo = titulo,
+                        detalle = detalle,
+                        montoTexto = montoFormateado,
+                        esIngreso = esIngreso
+                    )
+                )
+            }
         }
     }
 

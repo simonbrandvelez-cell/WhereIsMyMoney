@@ -1,5 +1,6 @@
 package com.example.whereismymoney
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -27,6 +28,7 @@ class RegistrarActivity : AppCompatActivity() {
     private val db = Firebase.database.reference
 
     private var tipoMovimientoSeleccionado = "gasto"
+    private var monedaActual = "EUR"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +41,14 @@ class RegistrarActivity : AppCompatActivity() {
             insets
         }
 
+        val prefs = getSharedPreferences("wimm_prefs", Context.MODE_PRIVATE)
+        monedaActual = prefs.getString("moneda", "EUR") ?: "EUR"
+
         val btnTabGasto = findViewById<Button>(R.id.btnTabGasto)
         val btnTabIngreso = findViewById<Button>(R.id.btnTabIngreso)
         val tvPreguntaMonto = findViewById<TextView>(R.id.tvPreguntaMonto)
         val etMonto = findViewById<EditText>(R.id.etMonto)
+        val tvSimboloMoneda = findViewById<TextView>(R.id.tvSimboloMoneda)
         val spinnerCategoria = findViewById<Spinner>(R.id.spinnerCategoria)
         val tvFechaSeleccionada = findViewById<TextView>(R.id.tvFechaSeleccionada)
         val etNota = findViewById<EditText>(R.id.etNota)
@@ -50,6 +56,12 @@ class RegistrarActivity : AppCompatActivity() {
 
         val tabInicio = findViewById<LinearLayout>(R.id.tabInicio)
         val tabHistorial = findViewById<LinearLayout>(R.id.tabHistorial)
+
+        tvSimboloMoneda.text = when (monedaActual) {
+            "COP" -> "COP"
+            "USD" -> "US$"
+            else -> "€"
+        }
 
         fun cargarCategorias(arrayResId: Int) {
             val adapter = ArrayAdapter.createFromResource(
@@ -97,10 +109,16 @@ class RegistrarActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val monto = montoTexto.toDoubleOrNull()
-            if (monto == null || monto <= 0.0) {
+            val montoIngresado = montoTexto.toDoubleOrNull()
+            if (montoIngresado == null || montoIngresado <= 0.0) {
                 Toast.makeText(this, "El monto debe ser mayor a 0", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
+            }
+
+            val montoEnEur = when (monedaActual) {
+                "COP" -> montoIngresado / 4650.0
+                "USD" -> montoIngresado / 1.08
+                else -> montoIngresado
             }
 
             val categoria = spinnerCategoria.selectedItem?.toString() ?: "Otros"
@@ -115,7 +133,7 @@ class RegistrarActivity : AppCompatActivity() {
 
             val movimientoMap = mapOf(
                 "tipo" to tipoMovimientoSeleccionado,
-                "monto" to monto,
+                "monto" to montoEnEur,
                 "categoria" to categoria,
                 "fecha" to fecha,
                 "nota" to nota

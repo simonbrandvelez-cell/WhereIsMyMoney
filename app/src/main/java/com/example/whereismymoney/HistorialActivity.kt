@@ -1,5 +1,6 @@
 package com.example.whereismymoney
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -37,7 +38,8 @@ class HistorialActivity : AppCompatActivity() {
     private val db = Firebase.database.reference
 
     private var todosLosMovimientos = listOf<RegistroHistorial>()
-    private var filtroActual = "todos" // "todos", "ingreso", "gasto"
+    private var filtroActual = "todos"
+    private var monedaActual = "EUR"
 
     private lateinit var tvTituloResumenHistorial: TextView
     private lateinit var tvTotalFiltrado: TextView
@@ -54,6 +56,9 @@ class HistorialActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        val prefs = getSharedPreferences("wimm_prefs", Context.MODE_PRIVATE)
+        monedaActual = prefs.getString("moneda", "EUR") ?: "EUR"
 
         tvTituloResumenHistorial = findViewById(R.id.tvTituloResumenHistorial)
         tvTotalFiltrado = findViewById(R.id.tvTotalFiltrado)
@@ -140,6 +145,23 @@ class HistorialActivity : AppCompatActivity() {
         }
     }
 
+    private fun convertirDesdeEur(montoEur: Double): Double {
+        return when (monedaActual) {
+            "COP" -> montoEur * 4650.0
+            "USD" -> montoEur * 1.08
+            else -> montoEur
+        }
+    }
+
+    private fun formatearMonto(montoEur: Double, prefijoSigno: String = ""): String {
+        val convertido = convertirDesdeEur(montoEur)
+        return when (monedaActual) {
+            "COP" -> "$prefijoSigno${String.format(Locale("es", "CO"), "%,.0f", convertido)} COP"
+            "USD" -> "$prefijoSigno${String.format(Locale("en", "US"), "%,.2f", convertido)} US$"
+            else -> "$prefijoSigno${String.format(Locale("es", "ES"), "%,.2f", convertido)} €"
+        }
+    }
+
     private fun renderizarListaFiltrada() {
         val filtrados = when (filtroActual) {
             "ingreso" -> todosLosMovimientos.filter { it.tipo.equals("ingreso", ignoreCase = true) }
@@ -162,15 +184,15 @@ class HistorialActivity : AppCompatActivity() {
         when (filtroActual) {
             "ingreso" -> {
                 tvTituloResumenHistorial.text = "Total ingresos filtrados"
-                tvTotalFiltrado.text = String.format(Locale("es", "ES"), "+%.2f €", sumaIngresos)
+                tvTotalFiltrado.text = formatearMonto(sumaIngresos, "+")
             }
             "gasto" -> {
                 tvTituloResumenHistorial.text = "Total gastos filtrados"
-                tvTotalFiltrado.text = String.format(Locale("es", "ES"), "-%.2f €", sumaGastos)
+                tvTotalFiltrado.text = formatearMonto(sumaGastos, "-")
             }
             else -> {
                 tvTituloResumenHistorial.text = "Balance mostrado"
-                tvTotalFiltrado.text = String.format(Locale("es", "ES"), "%.2f €", sumaIngresos - sumaGastos)
+                tvTotalFiltrado.text = formatearMonto(sumaIngresos - sumaGastos)
             }
         }
 
@@ -185,11 +207,7 @@ class HistorialActivity : AppCompatActivity() {
             val esIngreso = item.tipo.equals("ingreso", ignoreCase = true)
             val titulo = if (item.nota.isNotEmpty()) item.nota else item.categoria
             val detalle = if (item.fecha.isNotEmpty()) "${item.categoria} · ${item.fecha}" else item.categoria
-            val montoTexto = String.format(
-                Locale("es", "ES"),
-                if (esIngreso) "+%.2f €" else "-%.2f €",
-                item.monto
-            )
+            val montoTexto = formatearMonto(item.monto, if (esIngreso) "+" else "-")
 
             val tarjeta = crearTarjetaHistorial(
                 icono = if (esIngreso) "💰" else "💸",

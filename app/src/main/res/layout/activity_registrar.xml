@@ -118,11 +118,12 @@
                             android:singleLine="true"/>
 
                         <TextView
+                            android:id="@+id/tvSimboloMoneda"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="€"
                             android:textColor="#087F63"
-                            android:textSize="28sp"
+                            android:textSize="24sp"
                             android:textStyle="bold"
                             android:layout_marginStart="8dp"/>
                     </LinearLayout>
