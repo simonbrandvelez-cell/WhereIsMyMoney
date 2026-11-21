@@ -123,7 +123,6 @@ class InicioActivity : AppCompatActivity() {
                                 )
                             )
                         } else {
-                            // Mostrar los últimos 5 movimientos del más reciente al más antiguo
                             val recientes = listaMovimientos.asReversed().take(5)
                             for (item in recientes) {
                                 val esIngreso = item.tipo.equals("ingreso", ignoreCase = true)
@@ -163,7 +162,7 @@ class InicioActivity : AppCompatActivity() {
         }
 
         tabHistorial.setOnClickListener {
-            Toast.makeText(this, "Pantalla de Historial en desarrollo", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, HistorialActivity::class.java))
         }
     }
 

@@ -61,14 +61,11 @@ class RegistrarActivity : AppCompatActivity() {
             spinnerCategoria.adapter = adapter
         }
 
-        // Cargar categorías de gasto por defecto
         cargarCategorias(R.array.categorias_gasto_array)
 
-        // Mostrar fecha actual
         val fechaFormateada = SimpleDateFormat("d 'de' MMMM 'de' yyyy", Locale("es", "ES")).format(Date())
         tvFechaSeleccionada.text = fechaFormateada
 
-        // Pestaña Gasto
         btnTabGasto.setOnClickListener {
             tipoMovimientoSeleccionado = "gasto"
             btnTabGasto.setBackgroundColor(Color.parseColor("#FFFFFF"))
@@ -81,7 +78,6 @@ class RegistrarActivity : AppCompatActivity() {
             cargarCategorias(R.array.categorias_gasto_array)
         }
 
-        // Pestaña Ingreso con sus propias categorías
         btnTabIngreso.setOnClickListener {
             tipoMovimientoSeleccionado = "ingreso"
             btnTabIngreso.setBackgroundColor(Color.parseColor("#FFFFFF"))
@@ -94,7 +90,6 @@ class RegistrarActivity : AppCompatActivity() {
             cargarCategorias(R.array.categorias_ingreso_array)
         }
 
-        // Guardar movimiento en Firebase
         btnGuardar.setOnClickListener {
             val montoTexto = etMonto.text.toString().trim().replace(",", ".")
             if (montoTexto.isEmpty()) {
@@ -153,7 +148,8 @@ class RegistrarActivity : AppCompatActivity() {
         }
 
         tabHistorial.setOnClickListener {
-            Toast.makeText(this, "Pantalla de Historial en desarrollo", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, HistorialActivity::class.java))
+            finish()
         }
     }
 }

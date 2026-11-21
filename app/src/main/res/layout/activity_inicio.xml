@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="#F7F7EF">
 
-    <!-- CONTENIDO PRINCIPAL CON SCROLL Y MÁRGENES INTERNOS -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,7 +20,6 @@
             android:orientation="vertical"
             android:paddingBottom="24dp">
 
-            <!-- ENCABEZADO: FECHA, SALUDO Y AVATAR -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -73,7 +71,6 @@
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
 
-            <!-- TARJETA VERDE DE SALDO REDONDEADA -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -131,7 +128,6 @@
                         android:background="#1D755F"
                         android:layout_marginBottom="16dp"/>
 
-                    <!-- INGRESOS Y GASTOS -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -188,7 +184,6 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- BOTÓN REGISTRAR MOVIMIENTO REDONDEADO -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnRegistrarMovimiento"
                 android:layout_width="match_parent"
@@ -203,7 +198,6 @@
                 app:elevation="0dp"
                 android:layout_marginBottom="20dp"/>
 
-            <!-- ENCABEZADO MOVIMIENTOS ACUMULADOS -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -229,7 +223,6 @@
                     android:textSize="12sp"/>
             </LinearLayout>
 
-            <!-- CONTENEDOR DINÁMICO DONDE SE ACUMULAN LOS MOVIMIENTOS -->
             <LinearLayout
                 android:id="@+id/llUltimosMovimientos"
                 android:layout_width="match_parent"
@@ -239,7 +232,6 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- BARRA DE NAVEGACIÓN INFERIOR -->
     <LinearLayout
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
@@ -249,7 +241,6 @@
         android:orientation="horizontal"
         android:gravity="center">
 
-        <!-- TAB INICIO -->
         <LinearLayout
             android:id="@+id/tabInicio"
             android:layout_width="0dp"
@@ -276,7 +267,6 @@
                 android:layout_marginTop="2dp"/>
         </LinearLayout>
 
-        <!-- TAB REGISTRAR -->
         <LinearLayout
             android:id="@+id/tabRegistrar"
             android:layout_width="0dp"
@@ -302,7 +292,6 @@
                 android:layout_marginTop="2dp"/>
         </LinearLayout>
 
-        <!-- TAB HISTORIAL -->
         <LinearLayout
             android:id="@+id/tabHistorial"
             android:layout_width="0dp"

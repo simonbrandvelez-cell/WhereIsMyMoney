@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F7F7EF">
+
+    <!-- CONTENIDO PRINCIPAL CON SCROLL -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomNav"
+        android:fillViewport="true"
+        android:paddingHorizontal="24dp"
+        android:paddingTop="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="24dp">
+
+            <!-- TÍTULO Y SUBTÍTULO -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Historial"
+                android:textColor="#1D302D"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Todos tus movimientos en tiempo real. Mantén pulsado para borrar."
+                android:textColor="#74817A"
+                android:textSize="13sp"
+                android:layout_marginBottom="18dp"/>
+
+            <!-- TARJETA RESUMEN DEL FILTRO -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="18dp"
+                app:cardBackgroundColor="#095D48"
+                app:cardCornerRadius="22dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="18dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvTituloResumenHistorial"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Balance mostrado"
+                            android:textColor="#B8D4CC"
+                            android:textSize="12sp"/>
+
+                        <TextView
+                            android:id="@+id/tvTotalFiltrado"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0,00 €"
+                            android:textColor="#FFFFFF"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="4dp"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvCantidadFiltrada"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#166E58"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="6dp"
+                        android:text="0 movs"
+                        android:textColor="#E5F1EA"
+                        android:textSize="12sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- FILTROS: TODOS / INGRESOS / GASTOS -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="#EFEFE6"
+                android:orientation="horizontal"
+                android:padding="4dp"
+                android:layout_marginBottom="18dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFiltroTodos"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="#FFFFFF"
+                    android:text="Todos"
+                    android:textAllCaps="false"
+                    android:textColor="#087F63"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="11dp"
+                    app:elevation="0dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFiltroIngresos"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="@android:color/transparent"
+                    android:text="Ingresos"
+                    android:textAllCaps="false"
+                    android:textColor="#74817A"
+                    android:textSize="13sp"
+                    app:cornerRadius="11dp"
+                    app:elevation="0dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFiltroGastos"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="@android:color/transparent"
+                    android:text="Gastos"
+                    android:textAllCaps="false"
+                    android:textColor="#74817A"
+                    android:textSize="13sp"
+                    app:cornerRadius="11dp"
+                    app:elevation="0dp"/>
+            </LinearLayout>
+
+            <!-- CONTENEDOR DE LISTA COMPLETA -->
+            <LinearLayout
+                android:id="@+id/llListaHistorial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- BARRA DE NAVEGACIÓN INFERIOR -->
+    <LinearLayout
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:layout_alignParentBottom="true"
+        android:background="#FFFFFF"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <!-- TAB INICIO -->
+        <LinearLayout
+            android:id="@+id/tabInicio"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="52dp"
+                android:layout_height="28dp"
+                android:gravity="center"
+                android:text="🏠"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Inicio"
+                android:textColor="#74817A"
+                android:textSize="11sp"
+                android:layout_marginTop="2dp"/>
+        </LinearLayout>
+
+        <!-- TAB REGISTRAR -->
+        <LinearLayout
+            android:id="@+id/tabRegistrar"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="52dp"
+                android:layout_height="28dp"
+                android:gravity="center"
+                android:text="⊕"
+                android:textColor="#74817A"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Registrar"
+                android:textColor="#74817A"
+                android:textSize="11sp"
+                android:layout_marginTop="2dp"/>
+        </LinearLayout>
+
+        <!-- TAB HISTORIAL (Activo) -->
+        <LinearLayout
+            android:id="@+id/tabHistorial"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="52dp"
+                android:layout_height="28dp"
+                android:background="#E5F1EA"
+                android:gravity="center"
+                android:text="☰"
+                android:textColor="#087F63"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Historial"
+                android:textColor="#087F63"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:layout_marginTop="2dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
