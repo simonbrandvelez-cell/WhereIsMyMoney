@@ -201,7 +201,40 @@
                 android:textStyle="bold"
                 app:cornerRadius="16dp"
                 app:elevation="0dp"
-                android:layout_marginBottom="16dp"/>
+                android:layout_marginBottom="20dp"/>
+
+            <!-- ENCABEZADO MOVIMIENTOS ACUMULADOS -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Movimientos recientes"
+                    android:textColor="#1D302D"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tvContadorMovs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 registros"
+                    android:textColor="#74817A"
+                    android:textSize="12sp"/>
+            </LinearLayout>
+
+            <!-- CONTENEDOR DINÁMICO DONDE SE ACUMULAN LOS MOVIMIENTOS -->
+            <LinearLayout
+                android:id="@+id/llUltimosMovimientos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
 
         </LinearLayout>
     </ScrollView>
