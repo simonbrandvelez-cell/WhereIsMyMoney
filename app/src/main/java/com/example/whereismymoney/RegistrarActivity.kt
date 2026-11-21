@@ -3,6 +3,7 @@ package com.example.whereismymoney
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -25,7 +26,7 @@ class RegistrarActivity : AppCompatActivity() {
     private val auth = FirebaseAuth.getInstance()
     private val db = Firebase.database.reference
 
-    private var tipoMovimientoSeleccionado = "gasto" // Por defecto es gasto
+    private var tipoMovimientoSeleccionado = "gasto"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,42 +51,50 @@ class RegistrarActivity : AppCompatActivity() {
         val tabInicio = findViewById<LinearLayout>(R.id.tabInicio)
         val tabHistorial = findViewById<LinearLayout>(R.id.tabHistorial)
 
-        // Mostrar fecha actual en el campo de texto
+        fun cargarCategorias(arrayResId: Int) {
+            val adapter = ArrayAdapter.createFromResource(
+                this,
+                arrayResId,
+                android.R.layout.simple_spinner_item
+            )
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinnerCategoria.adapter = adapter
+        }
+
+        // Cargar categorías de gasto por defecto
+        cargarCategorias(R.array.categorias_gasto_array)
+
+        // Mostrar fecha actual
         val fechaFormateada = SimpleDateFormat("d 'de' MMMM 'de' yyyy", Locale("es", "ES")).format(Date())
         tvFechaSeleccionada.text = fechaFormateada
 
-        // ----------------------------------------------------
-        // LÓGICA DE LOS BOTONES SUPERIORES (GASTO / INGRESO)
-        // ----------------------------------------------------
+        // Pestaña Gasto
         btnTabGasto.setOnClickListener {
             tipoMovimientoSeleccionado = "gasto"
-            // Estilo pestaña Gasto activa
             btnTabGasto.setBackgroundColor(Color.parseColor("#FFFFFF"))
             btnTabGasto.setTextColor(Color.parseColor("#087F63"))
-            // Estilo pestaña Ingreso inactiva
             btnTabIngreso.setBackgroundColor(Color.TRANSPARENT)
             btnTabIngreso.setTextColor(Color.parseColor("#74817A"))
 
             tvPreguntaMonto.text = "¿Cuánto gastaste?"
             btnGuardar.text = "✓   Guardar gasto"
+            cargarCategorias(R.array.categorias_gasto_array)
         }
 
+        // Pestaña Ingreso con sus propias categorías
         btnTabIngreso.setOnClickListener {
             tipoMovimientoSeleccionado = "ingreso"
-            // Estilo pestaña Ingreso activa
             btnTabIngreso.setBackgroundColor(Color.parseColor("#FFFFFF"))
             btnTabIngreso.setTextColor(Color.parseColor("#087F63"))
-            // Estilo pestaña Gasto inactiva
             btnTabGasto.setBackgroundColor(Color.TRANSPARENT)
             btnTabGasto.setTextColor(Color.parseColor("#74817A"))
 
             tvPreguntaMonto.text = "¿Cuánto ingresaste?"
             btnGuardar.text = "✓   Guardar ingreso"
+            cargarCategorias(R.array.categorias_ingreso_array)
         }
 
-        // ----------------------------------------------------
-        // GUARDAR MOVIMIENTO EN FIREBASE
-        // ----------------------------------------------------
+        // Guardar movimiento en Firebase
         btnGuardar.setOnClickListener {
             val montoTexto = etMonto.text.toString().trim().replace(",", ".")
             if (montoTexto.isEmpty()) {
@@ -99,7 +108,7 @@ class RegistrarActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val categoria = spinnerCategoria.selectedItem.toString()
+            val categoria = spinnerCategoria.selectedItem?.toString() ?: "Otros"
             val nota = etNota.text.toString().trim()
             val fecha = tvFechaSeleccionada.text.toString()
 
@@ -109,7 +118,6 @@ class RegistrarActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Crear el mapa de datos para Firebase
             val movimientoMap = mapOf(
                 "tipo" to tipoMovimientoSeleccionado,
                 "monto" to monto,
@@ -121,26 +129,24 @@ class RegistrarActivity : AppCompatActivity() {
             btnGuardar.isEnabled = false
             btnGuardar.text = "Guardando..."
 
-            // Guardar bajo el nodo usuarios/$uid/movimientos generando un ID único
             db.child("usuarios").child(uid).child("movimientos").push()
                 .setValue(movimientoMap)
                 .addOnSuccessListener {
                     Toast.makeText(this, "¡Movimiento guardado con éxito!", Toast.LENGTH_SHORT).show()
-                    // Regresar automáticamente a la pantalla de Inicio (la cual actualizará el saldo sola)
-                    val intent = Intent(this, InicioActivity::class.java)
-                    startActivity(intent)
+                    startActivity(Intent(this, InicioActivity::class.java))
                     finish()
                 }
                 .addOnFailureListener { e ->
                     btnGuardar.isEnabled = true
-                    btnGuardar.text = if (tipoMovimientoSeleccionado == "gasto") "✓   Guardar gasto" else "✓   Guardar ingreso"
+                    btnGuardar.text = if (tipoMovimientoSeleccionado == "gasto") {
+                        "✓   Guardar gasto"
+                    } else {
+                        "✓   Guardar ingreso"
+                    }
                     Toast.makeText(this, "Error al guardar: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
                 }
         }
 
-        // ----------------------------------------------------
-        // NAVEGACIÓN INFERIOR
-        // ----------------------------------------------------
         tabInicio.setOnClickListener {
             startActivity(Intent(this, InicioActivity::class.java))
             finish()

@@ -43,17 +43,14 @@ class InicioActivity : AppCompatActivity() {
         val tvIngresos = findViewById<TextView>(R.id.tvIngresos)
         val tvGastos = findViewById<TextView>(R.id.tvGastos)
         val btnRegistrarMovimiento = findViewById<Button>(R.id.btnRegistrarMovimiento)
-        val tvVerTodos = findViewById<TextView>(R.id.tvVerTodos)
         val tabRegistrar = findViewById<LinearLayout>(R.id.tabRegistrar)
         val tabHistorial = findViewById<LinearLayout>(R.id.tabHistorial)
 
-        // 1. Mostrar la fecha actual formateada en español
         val fechaActual = SimpleDateFormat("EEEE, d 'de' MMMM", Locale("es", "ES")).format(Date())
         tvFecha.text = fechaActual.replaceFirstChar { it.uppercase() }
 
         val uid = auth.currentUser?.uid
         if (uid != null) {
-            // 2. Cargar el nombre y las iniciales del usuario desde Firebase
             db.child("usuarios").child(uid).child("nombre").get()
                 .addOnSuccessListener { dato ->
                     val nombre = dato.getValue(String::class.java) ?: "Usuario"
@@ -61,7 +58,6 @@ class InicioActivity : AppCompatActivity() {
                     tvIniciales.text = nombre.take(2).uppercase()
                 }
 
-            // 3. Escuchar los movimientos en tiempo real para calcular ingresos, gastos y saldo total
             db.child("usuarios").child(uid).child("movimientos")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -81,7 +77,6 @@ class InicioActivity : AppCompatActivity() {
 
                         val saldoDisponible = totalIngresos - totalGastos
 
-                        // Actualizar los textos con los valores reales calculados
                         tvIngresos.text = String.format(Locale("es", "ES"), "+%.2f €", totalIngresos)
                         tvGastos.text = String.format(Locale("es", "ES"), "-%.2f €", totalGastos)
                         tvSaldoTotal.text = String.format(Locale("es", "ES"), "%.2f €", saldoDisponible)
@@ -93,28 +88,16 @@ class InicioActivity : AppCompatActivity() {
                 })
         }
 
-        // ----------------------------------------------------
-        // NAVEGACIÓN Y APERTURA DE PANTALLAS
-        // ----------------------------------------------------
-
-        // Botón principal de "+ Registrar movimiento"
         btnRegistrarMovimiento.setOnClickListener {
-            val intent = Intent(this, RegistrarActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, RegistrarActivity::class.java))
         }
 
-        // Pestaña inferior "Registrar"
         tabRegistrar.setOnClickListener {
-            val intent = Intent(this, RegistrarActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, RegistrarActivity::class.java))
         }
 
         tabHistorial.setOnClickListener {
             Toast.makeText(this, "Pantalla de Historial en desarrollo", Toast.LENGTH_SHORT).show()
-        }
-
-        tvVerTodos.setOnClickListener {
-            Toast.makeText(this, "Ver todos los movimientos", Toast.LENGTH_SHORT).show()
         }
     }
 }
